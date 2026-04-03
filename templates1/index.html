@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Osebni zapiski</title>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
+    <h1>Osebni zapiski</h1>
+
+    <p>Prijavljen kot: {{ session.username }} | <a href="/logout">Logout</a></p>
+
+    <!-- Obrazec za dodajanje zapiska -->
+    <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Naslov" required>
+        <textarea name="content" placeholder="Vsebina" required></textarea>
+        <button type="submit">Dodaj</button>
+    </form>
+
+    <!-- Seznam zapiskov -->
+    <ul>
+        {% for note in notes %}
+        <li id="note-{{ note.doc_id }}">
+            <strong>{{ note.title }}</strong>: {{ note.content }}
+            <button type="button" onclick="deleteNote({{ note.doc_id }})">Izbriši</button>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
