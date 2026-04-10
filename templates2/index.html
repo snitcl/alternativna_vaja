@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Socialna mreža</title>
+    <script>
+        function deletePost(index) {
+            fetch('/delete/' + index, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        document.getElementById('post-' + index).remove();
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Socialna mreža</h1>
+    <p>Prijavljen kot: {{ username }} | <a href="/logout">Logout</a></p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <textarea name="content" placeholder="Napiši objavo" required></textarea>
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Objavi</button>
+    </form>
+
+    <ul>
+        {% for post in posts %}
+        <li id="post-{{ loop.index0 }}">
+            <strong>{{ post.username }}</strong>: {{ post.content }}
+            {% if post.image %}
+                <br><img src="{{ url_for('static', filename='uploads/' + post.image) }}" width="200">
+            {% endif %}
+            {% if post.username == username %}
+                <br><button onclick="deletePost({{ loop.index0 }})">Izbriši</button>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
