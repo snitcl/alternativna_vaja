@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moja opravila</title>
+</head>
+<body>
+    <h1>Moja opravila</h1>
+
+    <!-- Forma za dodajanje -->
+    <form method="POST">
+        <input type="text" name="task" placeholder="Novo opravilo">
+        <button type="submit">Dodaj</button>
+    </form>
+
+    <p>Seznam opravil:</p>
+    {% if tasks %}
+        {% for task in tasks %}
+            {{ task }}<br>
+        {% endfor %}
+    {% else %}
+        Ni nobenega opravila.
+    {% endif %}
+</body>
+</html>
