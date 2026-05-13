@@ -3,22 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Osebni zapiski</title>
+    <script>
+        function addNote(event) {
+            event.preventDefault(); // prepreči osvežitev strani
+
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+
+            fetch("/add_note", {
+                method: "POST",
+                body: new URLSearchParams({
+                    "title": title,
+                    "content": content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // dodaj zapis v seznam
+                let li = document.createElement("li");
+                li.innerHTML = "<strong>" + data.title + "</strong>: " + data.content;
+                document.getElementById("notes_list").appendChild(li);
+
+                // počisti polja
+                document.getElementById("title").value = "";
+                document.getElementById("content").value = "";
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Osebni zapiski</h1>
 
     <p>Prijavljen kot: {{ session.username }} | <a href="/logout">Logout</a></p>
 
-    <form method="POST">
-        <input type="text" name="title" placeholder="Naslov" required>
-        <textarea name="content" placeholder="Vsebina" required></textarea>
+    <form onsubmit="addNote(event)">
+        <input type="text" id="title" placeholder="Naslov" required>
+        <br>
+        <textarea id="content" placeholder="Vsebina" required></textarea>
+        <br>
         <button type="submit">Dodaj</button>
     </form>
 
-    <ul>
+    <ul id="notes_list">
         {% for note in notes %}
-        <li>
-            <strong>{{ note.title }}</strong>: {{ note.content }}
+        <li><strong>{{ note.title }}</strong>: {{ note.content }}
             <a href="/delete/{{ loop.index0 }}">Izbriši</a>
         </li>
         {% endfor %}
