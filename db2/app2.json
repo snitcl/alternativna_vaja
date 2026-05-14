@@ -1,1 +1,1 @@
-{"users": {"1": {"username": "2", "password": "2"}}, "posts": {}}
+{"users": {"1": {"username": "2", "password": "2"}, "2": {"username": "3", "password": "3"}, "3": {"username": "4", "password": "3"}}, "posts": {"1": {"username": "3", "content": "lala", "image": "Posnetek zaslona 2024-03-06 202709.png"}}}

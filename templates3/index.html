@@ -2,33 +2,64 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Anketa / Glasovanje</title>
+    <title>Anketa</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
     <h1>Anketa</h1>
-
     <h2>{{ poll.question }}</h2>
-
-    {% if not has_voted %}
-    <form method="POST">
+    {% if voted == False %}
         {% for i in range(poll.options|length) %}
-            <input type="radio" name="option" value="{{ i }}" required>
-            {{ poll.options[i] }}<br>
+            <input type="radio" name="option" value="{{ i }}">
+            {{ poll.options[i] }}
+            <br>
         {% endfor %}
-        <button type="submit">Glasuj</button>
-    </form>
+        <br>
+        
+        <!--glasuj-->
+        <button onclick="vote()">GLASUJ</button>
     {% else %}
-        <p>Hvala, ker ste glasovali!</p>
+        <p>Glasovanje je uspelo.</p>
     {% endif %}
+    <hr>
 
-    <h3>Rezultati:</h3>
+    <h3>Rezultati</h3>
+
     <ul>
         {% for i in range(poll.options|length) %}
-            <li>{{ poll.options[i] }}: {{ poll.votes[i] }} glasov</li>
+            <li>
+                {{ poll.options[i] }} :
+                {{ poll.votes[i] }}
+            </li>
         {% endfor %}
     </ul>
+<!-- reset gumb-->
+    <button onclick="resetVotes()">RESET</button>
 
-    <p><a href="/reset">Ponastavi glasovanje (za test)</a></p>
+    <!-- AJAX -->
+    <script>
+        function vote() {
+            var option = document.querySelector('input[name="option"]:checked');
+            $.ajax({
+                url: "/vote",
+                method: "POST",
+                data: {
+                    option: option.value
+                },
+                success: function() {
+                    location.reload();
+                }
+            });
+        }
+        function resetVotes() {
+            $.ajax({
+                url: "/reset",
+                method: "GET",
+                success: function() {
+                    location.reload();
+                }
+            });
+        }
+    </script>
 </body>
-</html> 
-
+</html>
