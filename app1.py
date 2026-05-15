@@ -53,7 +53,7 @@ def register():
     return render_template("register.html")
 
 
-# index
+# index ( glavna stran)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if "username" not in session:
@@ -68,6 +68,7 @@ def index():
 def add_note():
     title = request.form["title"]
     content = request.form["content"]
+    # to shrani info v bazo
     notes_table.insert({'title': title, 'content': content})
     return jsonify({"title": title, "content": content})
 
